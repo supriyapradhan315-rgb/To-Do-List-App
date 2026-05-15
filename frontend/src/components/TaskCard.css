@@ -1,0 +1,158 @@
+// src/components/TaskCard.css - Styles for TaskCard
+
+.task-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 15px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.task-card:hover {
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+.task-card.completed {
+  background-color: #f0f8f0;
+  border-color: #28a745;
+}
+
+.task-content {
+  flex: 1;
+}
+
+.task-name {
+  font-size: 1.1rem;
+  color: #333;
+  margin: 0 0 8px 0;
+  word-break: break-word;
+}
+
+.task-card.completed .task-name {
+  text-decoration: line-through;
+  color: #6c757d;
+}
+
+.task-description {
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.task-card.completed .task-description {
+  color: #999;
+}
+
+.task-date {
+  font-size: 0.85rem;
+  color: #999;
+  display: inline-block;
+}
+
+.task-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.btn-action {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background-color: #f0f0f0;
+}
+
+.btn-complete {
+  background-color: #e7f3ff;
+  color: #0066cc;
+}
+
+.btn-complete:hover {
+  background-color: #cce5ff;
+  transform: scale(1.05);
+}
+
+.btn-complete.completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+  .btn-edit {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+
+  .btn-edit:hover {
+    background-color: #ffe8a1;
+    transform: scale(1.05);
+  }
+
+  .btn-save {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  .btn-save:hover {
+    background-color: #c3e6cb;
+    transform: scale(1.05);
+  }
+
+  .btn-cancel {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  .btn-cancel:hover {
+    background-color: #f1b0b7;
+    transform: scale(1.05);
+  }
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .task-card {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .task-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .task-name {
+    font-size: 1rem;
+  }
+
+  .task-description {
+    font-size: 0.9rem;
+  }
+}
+
+.edit-input,
+.edit-textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.edit-input:focus,
+.edit-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
