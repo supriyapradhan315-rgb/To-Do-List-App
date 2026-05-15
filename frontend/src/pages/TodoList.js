@@ -15,7 +15,7 @@ const TodoList = () => {
   const [loading, setLoading] = useState(true);
 
   // API Base URL
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  const API_URL = process.env.REACT_APP_API_URL || 'https://to-do-list-app-vhva.onrender.com';
 
   // Fetch all tasks from the backend
   const fetchTasks = async () => {
