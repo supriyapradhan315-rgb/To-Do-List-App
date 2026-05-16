@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 // src/pages/TodoList.js - Main To-Do List Page
 
 import React, { useState, useEffect } from 'react';
@@ -11,18 +13,33 @@ const TodoList = () => {
   // State management
   const [tasks, setTasks] = useState([]);
   const [message, setMessage] = useState(null);
-  const [messageType, setMessageType] = useState(''); // 'success' or 'error'
+  const [messageType, setMessageType] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // API Base URL
-  const API_URL = process.env.REACT_APP_API_URL || 'https://to-do-list-app-vhva.onrender.com';
+  // Backend API URL
+  const API_URL =
+    process.env.REACT_APP_API_URL ||
+    'https://to-do-list-app-vhva.onrender.com';
+
   const TASKS_ENDPOINT = `${API_URL}/api/tasks`;
 
-  // Fetch all tasks from the backend
+  // Function to show messages
+  const showMessage = (text, type) => {
+    setMessage(text);
+    setMessageType(type);
+
+    setTimeout(() => {
+      setMessage(null);
+    }, 3000);
+  };
+
+  // Fetch all tasks
   const fetchTasks = async () => {
     try {
       setLoading(true);
+
       const response = await axios.get(TASKS_ENDPOINT);
+
       if (response.data.success) {
         setTasks(response.data.data);
       }
@@ -39,16 +56,7 @@ const TodoList = () => {
     fetchTasks();
   }, []);
 
-  // Function to show messages
-  const showMessage = (text, type) => {
-    setMessage(text);
-    setMessageType(type);
-    setTimeout(() => {
-      setMessage(null);
-    }, 3000); // Hide message after 3 seconds
-  };
-
-  // Handle adding a new task
+  // Add task
   const handleAddTask = async (taskData) => {
     try {
       const response = await axios.post(TASKS_ENDPOINT, {
@@ -57,26 +65,31 @@ const TodoList = () => {
       });
 
       if (response.data.success) {
-        setTasks([response.data.data, ...tasks]); // Add new task to the beginning
+        setTasks([response.data.data, ...tasks]);
         showMessage('Task added successfully!', 'success');
       } else {
         showMessage(response.data.message || 'Failed to add task', 'error');
       }
     } catch (error) {
       console.error('Error adding task:', error);
+
       const backendMessage =
         error.response?.data?.message || 'Failed to add task';
+
       showMessage(backendMessage, 'error');
     }
   };
 
-  // Handle deleting a task
+  // Delete task
   const handleDeleteTask = async (taskId) => {
     try {
-      const response = await axios.delete(`${TASKS_ENDPOINT}/${taskId}`);
+      const response = await axios.delete(
+        `${TASKS_ENDPOINT}/${taskId}`
+      );
 
       if (response.data.success) {
         setTasks(tasks.filter((task) => task._id !== taskId));
+
         showMessage('Task deleted successfully!', 'success');
       }
     } catch (error) {
@@ -85,22 +98,29 @@ const TodoList = () => {
     }
   };
 
-  // Handle marking a task as completed
+  // Complete task
   const handleCompleteTask = async (taskId) => {
     try {
-      // Find the task and toggle its completed status
       const task = tasks.find((t) => t._id === taskId);
-      const response = await axios.put(`${TASKS_ENDPOINT}/${taskId}`, {
-        completed: !task.completed,
-      });
+
+      const response = await axios.put(
+        `${TASKS_ENDPOINT}/${taskId}`,
+        {
+          completed: !task.completed,
+        }
+      );
 
       if (response.data.success) {
-        // Update the tasks list with the updated task
         setTasks(
-          tasks.map((t) => (t._id === taskId ? response.data.data : t))
+          tasks.map((t) =>
+            t._id === taskId ? response.data.data : t
+          )
         );
+
         showMessage(
-          response.data.data.completed ? 'Task marked as completed!' : 'Task marked as incomplete!',
+          response.data.data.completed
+            ? 'Task marked as completed!'
+            : 'Task marked as incomplete!',
           'success'
         );
       }
@@ -110,23 +130,34 @@ const TodoList = () => {
     }
   };
 
-  // Handle editing a task's name or description
+  // Edit task
   const handleEditTask = async (taskId, updateData) => {
     try {
-      const response = await axios.put(`${TASKS_ENDPOINT}/${taskId}`, updateData);
+      const response = await axios.put(
+        `${TASKS_ENDPOINT}/${taskId}`,
+        updateData
+      );
 
       if (response.data.success) {
         setTasks(
-          tasks.map((t) => (t._id === taskId ? response.data.data : t))
+          tasks.map((t) =>
+            t._id === taskId ? response.data.data : t
+          )
         );
+
         showMessage('Task updated successfully!', 'success');
       } else {
-        showMessage(response.data.message || 'Failed to update task', 'error');
+        showMessage(
+          response.data.message || 'Failed to update task',
+          'error'
+        );
       }
     } catch (error) {
       console.error('Error editing task:', error);
+
       const backendMessage =
         error.response?.data?.message || 'Failed to update task';
+
       showMessage(backendMessage, 'error');
     }
   };
@@ -136,13 +167,15 @@ const TodoList = () => {
       <div className="todo-wrapper">
         <h1 className="todo-title">📝 My To-Do List</h1>
 
-        {/* Display messages */}
-        {message && <Message text={message} type={messageType} />}
+        {/* Messages */}
+        {message && (
+          <Message text={message} type={messageType} />
+        )}
 
-        {/* Task input form */}
+        {/* Add Task Form */}
         <TaskForm onAddTask={handleAddTask} />
 
-        {/* Task list */}
+        {/* Task List */}
         {loading ? (
           <div className="loading">Loading tasks...</div>
         ) : (
@@ -154,7 +187,7 @@ const TodoList = () => {
           />
         )}
 
-        {/* Display message when no tasks exist */}
+        {/* Empty State */}
         {!loading && tasks.length === 0 && (
           <div className="no-tasks">
             <p>No tasks yet. Add one to get started! 🚀</p>

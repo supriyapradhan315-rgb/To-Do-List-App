@@ -1,30 +1,25 @@
 // server.js - Main Express Server File
 
 require('dotenv').config(); // Load environment variables
+
 const express = require('express');
 const cors = require('cors');
+
 const connectDB = require('./db');
 const taskRoutes = require('./routes/taskRoutes');
 
 // Initialize Express app
 const app = express();
 
-// Middleware
-app.use(express.json()); // Parse JSON bodies
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
-
-// CORS - Allow requests from frontend
-app.use(
-  cors({
-    origin: process.env.NODE_ENV === 'production' 
-      ? 'https://yourdomain.com' 
-      : 'http://localhost:3000',
-    credentials: true,
-  })
-);
-
 // Connect to MongoDB
 connectDB();
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Enable CORS
+app.use(cors());
 
 // API Routes
 app.use('/api/tasks', taskRoutes);
@@ -50,7 +45,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// Error handling middleware for 404
+// 404 handler
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -59,9 +54,10 @@ app.use((req, res) => {
   });
 });
 
-// Error handling middleware
+// Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
+
   res.status(err.status || 500).json({
     success: false,
     message: err.message || 'Internal server error',
@@ -69,9 +65,10 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start the server
+// Start server
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV}`);
 });
