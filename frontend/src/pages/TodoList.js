@@ -16,12 +16,13 @@ const TodoList = () => {
 
   // API Base URL
   const API_URL = process.env.REACT_APP_API_URL || 'https://to-do-list-app-vhva.onrender.com';
+  const TASKS_ENDPOINT = `${API_URL}/api/tasks`;
 
   // Fetch all tasks from the backend
   const fetchTasks = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_URL}/tasks`);
+      const response = await axios.get(TASKS_ENDPOINT);
       if (response.data.success) {
         setTasks(response.data.data);
       }
@@ -50,7 +51,7 @@ const TodoList = () => {
   // Handle adding a new task
   const handleAddTask = async (taskData) => {
     try {
-      const response = await axios.post(`${API_URL}/tasks`, {
+      const response = await axios.post(TASKS_ENDPOINT, {
         taskName: taskData.taskName,
         description: taskData.description,
       });
@@ -72,7 +73,7 @@ const TodoList = () => {
   // Handle deleting a task
   const handleDeleteTask = async (taskId) => {
     try {
-      const response = await axios.delete(`${API_URL}/tasks/${taskId}`);
+      const response = await axios.delete(`${TASKS_ENDPOINT}/${taskId}`);
 
       if (response.data.success) {
         setTasks(tasks.filter((task) => task._id !== taskId));
@@ -89,7 +90,7 @@ const TodoList = () => {
     try {
       // Find the task and toggle its completed status
       const task = tasks.find((t) => t._id === taskId);
-      const response = await axios.put(`${API_URL}/tasks/${taskId}`, {
+      const response = await axios.put(`${TASKS_ENDPOINT}/${taskId}`, {
         completed: !task.completed,
       });
 
@@ -112,7 +113,7 @@ const TodoList = () => {
   // Handle editing a task's name or description
   const handleEditTask = async (taskId, updateData) => {
     try {
-      const response = await axios.put(`${API_URL}/tasks/${taskId}`, updateData);
+      const response = await axios.put(`${TASKS_ENDPOINT}/${taskId}`, updateData);
 
       if (response.data.success) {
         setTasks(
